@@ -1,19 +1,31 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	comp "go_basic/cmd/10_composition"
+	customerror "go_basic/cmd/11_errors"
 )
 
 func main() {
-	notifiers := []comp.Notifier{
-		&comp.Email{Address: "jay@choi.com"},
-		&comp.SMS{Phone: "010-1234-5678"},
-		&comp.Slack{Channel: "일반"},
+	result, err := customerror.Parse("host=localhost\nport=8080\ndb=postgres")
+	if err != nil {
+		fmt.Println("에러:", err)
+	} else {
+		fmt.Println("정상:", result)
 	}
 
-	results := comp.SendAll(notifiers, "공지사항")
-	for _, r := range results {
-		fmt.Println(r)
+	_, err = customerror.Parse("")
+	if errors.Is(err, customerror.EmptyInputError) {
+		fmt.Println("빈 입력 감지:", err)
+	}
+
+	_, err = customerror.Parse("host=localhost\nbad_line\nport=8080")
+	if errors.Is(err, customerror.InvalidFormatError) {
+		fmt.Println("포맷 에러:", err)
+	}
+
+	var parseErr *customerror.ParseError
+	if errors.As(err, &parseErr) {
+		fmt.Printf("상세 — %d번째 줄: '%s'\n", parseErr.Line, parseErr.Content)
 	}
 }
