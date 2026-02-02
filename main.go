@@ -3,7 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
-	minibank "go_basic/cmd/mini_bank"
+	minibank "go_basic/cmd/minibank"
 )
 
 func main() {
