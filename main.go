@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
-	stack "go_basic/cmd/05_slices"
+	phonebook "go_basic/cmd/06_maps"
 )
 
 func main() {
-	stack.Push(1)
-	fmt.Println(stack.Peek())
-	fmt.Println(stack.Pop())
-	fmt.Println(stack.Size())
+	phonebook.Add("Jay", "123-456-7890")
+	phonebook.Add("John", "987-654-3210")
+	fmt.Println(phonebook.List())
+	fmt.Println(phonebook.Search("Jay"))
+	phonebook.Delete("Jay")
 }
