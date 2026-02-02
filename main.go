@@ -13,6 +13,9 @@ func main() {
 		"https://asdf7as9d8fas8df",
 	}
 
-	result := channels.FetchOne(urls[0])
-	fmt.Println(result)
+	results := channels.FetchAll(urls)
+
+	for _, v := range results {
+		fmt.Println(v)
+	}
 }

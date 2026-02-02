@@ -5,6 +5,31 @@ import (
 	"net/http"
 )
 
+func FetchAll(urls []string) []string {
+	ch := make(chan string)
+
+	for _, url := range urls {
+		go func(u string) {
+			res, err := http.Get(u)
+			if err != nil {
+				ch <- fmt.Sprintf("%s > error", u)
+				return
+			}
+
+			defer res.Body.Close()
+
+			ch <- fmt.Sprintf("%s > %d", u, res.StatusCode)
+		}(url)
+	}
+
+	results := []string{}
+	for range urls {
+		results = append(results, <-ch)
+	}
+
+	return results
+}
+
 func FetchOne(url string) string {
 	// 채널 생성
 	ch := make(chan string)
