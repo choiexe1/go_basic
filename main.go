@@ -2,20 +2,25 @@ package main
 
 import (
 	"fmt"
-	channels "go_basic/cmd/13_channels"
+	mutex "go_basic/cmd/14_mutex"
+	"sync"
 )
 
 func main() {
-	urls := []string{
-		"https://www.google.com",
-		"https://www.github.com",
-		"https://asdfzx87cv98a7d",
-		"https://asdf7as9d8fas8df",
+	counter := mutex.NewCounter()
+
+	var wg sync.WaitGroup
+
+	for range 100 {
+		wg.Go(func() {
+			counter.Increment()
+		})
 	}
 
-	results := channels.FetchAll(urls)
+	wg.Wait()
 
-	for _, v := range results {
-		fmt.Println(v)
-	}
+	// 1. mutex 없이 하면, 레이스 컨디션 발생한다..
+	// 	  go run -race .로 확인할수있음
+	// 2. mutex 적용 후, 레이스 컨디션 발생 X
+	fmt.Println(counter.Value())
 }
