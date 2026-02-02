@@ -3,29 +3,51 @@ package main
 import (
 	"errors"
 	"fmt"
-	customerror "go_basic/cmd/11_errors"
+	minibank "go_basic/cmd/mini_bank"
 )
 
 func main() {
-	result, err := customerror.Parse("host=localhost\nport=8080\ndb=postgres")
+	bank := minibank.NewBank()
+
+	jay, _ := bank.CreateAccount("001", "Jay")
+	kim, _ := bank.CreateAccount("002", "Kim")
+
+	jay.Deposit(100000, "EXTERNAL")
+	kim.Deposit(50000, "EXTERNAL")
+	fmt.Println(jay)
+	fmt.Println(kim)
+
+	fmt.Println("--- Transfer ---")
+	err := bank.Transfer("001", "002", 30000)
 	if err != nil {
 		fmt.Println("에러:", err)
-	} else {
-		fmt.Println("정상:", result)
+	}
+	fmt.Println(jay)
+	fmt.Println(kim)
+
+	fmt.Println("--- 잔액 부족 ---")
+	err = bank.Transfer("001", "002", 999999)
+	if err != nil {
+		fmt.Println("에러:", err)
+	}
+	if errors.Is(err, minibank.ErrInsufficientBalance) {
+		fmt.Println("원인: 잔액 부족 확인됨")
 	}
 
-	_, err = customerror.Parse("")
-	if errors.Is(err, customerror.EmptyInputError) {
-		fmt.Println("빈 입력 감지:", err)
+	fmt.Println("--- 없는 계좌 ---")
+	err = bank.Transfer("001", "999", 1000)
+	if errors.Is(err, minibank.ErrAccountNotFound) {
+		fmt.Println("에러:", err)
 	}
 
-	_, err = customerror.Parse("host=localhost\nbad_line\nport=8080")
-	if errors.Is(err, customerror.InvalidFormatError) {
-		fmt.Println("포맷 에러:", err)
+	fmt.Println("--- 중복 계좌 ---")
+	_, err = bank.CreateAccount("001", "Duplicate")
+	if errors.Is(err, minibank.ErrAlreadyExistID) {
+		fmt.Println("에러:", err)
 	}
 
-	var parseErr *customerror.ParseError
-	if errors.As(err, &parseErr) {
-		fmt.Printf("상세 — %d번째 줄: '%s'\n", parseErr.Line, parseErr.Content)
+	fmt.Println("--- 거래 내역 ---")
+	for _, t := range jay.History() {
+		fmt.Printf("[%s] %s → %s : %.0f원\n", t.Type, t.From, t.To, t.Amount)
 	}
 }
