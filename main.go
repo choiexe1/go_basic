@@ -1,20 +1,15 @@
 package main
 
 import (
-	"fmt"
-	pointerprac "go_basic/cmd/08_pointers"
+	shape "go_basic/cmd/09_interfaces"
 )
 
 func main() {
-	l := pointerprac.NewLinkedList()
+	c := &shape.Circle{Radius: 5}
+	r := &shape.Rectangle{Width: 3, Height: 4}
+	t := &shape.Triangle{A: 3, B: 4, C: 5}
 
-	l.Insert(1)
-	l.Insert(4)
-	l.Insert(9)
-	l.Insert(7)
-
-	fmt.Println(l.Find(7))
-	fmt.Println(l.Delete(7))
-	fmt.Println(l.Find(7))
-	fmt.Println(l)
+	shape.PrintInfo(c)
+	shape.PrintInfo(r)
+	shape.PrintInfo(t)
 }
