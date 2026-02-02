@@ -3,28 +3,18 @@ package main
 import (
 	"fmt"
 	goroutines "go_basic/cmd/12_goroutines"
-	"sync"
 )
 
 func main() {
-	var wg sync.WaitGroup
+	urls := []string{
+		"https://www.google.com",
+		"https://www.github.com",
+		"https://asdfzx87cv98a7d",
+		"https://asdf7as9d8fas8df",
+	}
 
-	wg.Add(3)
-
-	go func() {
-		defer wg.Done()
-		fmt.Println(goroutines.DoA())
-	}()
-
-	go func() {
-		defer wg.Done()
-		fmt.Println(goroutines.DoB())
-	}()
-
-	go func() {
-		defer wg.Done()
-		fmt.Println(goroutines.DoC())
-	}()
-
-	wg.Wait()
+	results := goroutines.FetchAll(urls)
+	for _, r := range results {
+		fmt.Println(r)
+	}
 }
