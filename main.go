@@ -2,20 +2,19 @@ package main
 
 import (
 	"fmt"
-	librarysystem "go_basic/cmd/07_structs"
+	pointerprac "go_basic/cmd/08_pointers"
 )
 
 func main() {
-	book := librarysystem.Book{
-		Title:  "Go Programming Book",
-		Author: "Rob Pike, Ken Thopson, Robert Griesemer",
-		ISBN:   "1",
-	}
+	l := pointerprac.NewLinkedList()
 
-	member := librarysystem.Member{
-		ID:   "1",
-		Name: "Jay Choi",
-	}
+	l.Insert(1)
+	l.Insert(4)
+	l.Insert(9)
+	l.Insert(7)
 
-	fmt.Println(librarysystem.NewLoan(member, book, "2026-02-03"))
+	fmt.Println(l.Find(7))
+	fmt.Println(l.Delete(7))
+	fmt.Println(l.Find(7))
+	fmt.Println(l)
 }
