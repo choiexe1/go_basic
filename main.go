@@ -2,10 +2,12 @@ package main
 
 import (
 	"fmt"
-	string "go_basic/cmd/04_string"
+	stack "go_basic/cmd/05_slices"
 )
 
 func main() {
-	result := string.Counter("Hello hello World Fox Basil")
-	fmt.Println(result)
+	stack.Push(1)
+	fmt.Println(stack.Peek())
+	fmt.Println(stack.Pop())
+	fmt.Println(stack.Size())
 }
