@@ -1,7 +1,7 @@
 package main
 
-import variables "go_basic/cmd/01_variables"
+import controlflow "go_basic/cmd/02_control_flow"
 
 func main() {
-	variables.Calculate()
+	controlflow.FizzBuzz(100)
 }
