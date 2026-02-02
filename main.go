@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	goroutines "go_basic/cmd/12_goroutines"
+	channels "go_basic/cmd/13_channels"
 )
 
 func main() {
@@ -13,8 +13,6 @@ func main() {
 		"https://asdf7as9d8fas8df",
 	}
 
-	results := goroutines.FetchAll(urls)
-	for _, r := range results {
-		fmt.Println(r)
-	}
+	result := channels.FetchOne(urls[0])
+	fmt.Println(result)
 }
