@@ -1,41 +1,38 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	setandtags "go_basic/cmd/15_set_and_tags"
+	stdinterfaces "go_basic/cmd/16_std_interfaces"
+	"io"
 )
 
 func main() {
-	a := &setandtags.Student{
-		ID:      "S001",
-		Name:    "",
-		Classes: map[string]struct{}{},
+	entry, err := stdinterfaces.NewLogEntry("INFO", "서버 시작됨")
+	fmt.Println(entry.String())
+	fmt.Println("에러:", err)
+
+	_, err = stdinterfaces.NewLogEntry("DEBUG", "잘못된 레벨")
+	fmt.Println("잘못된 레벨 에러:", err)
+
+	writer := &stdinterfaces.LogWriter{}
+	fmt.Fprintf(writer, "%s\n", entry.String())
+
+	entry2, _ := stdinterfaces.NewLogEntry("ERROR", "디스크 부족")
+	fmt.Fprintf(writer, "%s\n", entry2.String())
+	fmt.Println("=== LogWriter 버퍼 내용 ===")
+	fmt.Println(writer.String())
+
+	reader := stdinterfaces.NewLogReader([]byte("LogReader로 읽는 테스트 데이터"))
+	buf := make([]byte, 10)
+	fmt.Println("=== LogReader 읽기 ===")
+	for {
+		n, err := reader.Read(buf)
+		if n > 0 {
+			fmt.Print(string(buf[:n]))
+		}
+		if err == io.EOF {
+			break
+		}
 	}
-	b := &setandtags.Student{
-		ID:      "S002",
-		Name:    "이영희",
-		Classes: map[string]struct{}{},
-	}
-
-	a.Enroll("Go기초")
-	a.Enroll("알고리즘")
-	a.Enroll("네트워크")
-
-	b.Enroll("알고리즘")
-	b.Enroll("데이터베이스")
-	b.Enroll("네트워크")
-
-	a.Enroll("임시과목")
-	fmt.Println("Drop 전 - 임시과목 수강여부:", a.IsEnroll("임시과목"))
-	a.Drop("임시과목")
-	fmt.Println("Drop 후 - 임시과목 수강여부:", a.IsEnroll("임시과목"))
-
-	fmt.Println("\n공통 과목:", setandtags.CommonCourses(a, b))
-	fmt.Println("전체 과목:", setandtags.AllCourses(a, b))
-
-	report := setandtags.BuildReport(a, b)
-	jsonBytes, _ := json.MarshalIndent(report, "", "  ")
-	fmt.Println("\n=== 리포트 ===")
-	fmt.Println(string(jsonBytes))
+	fmt.Println()
 }
