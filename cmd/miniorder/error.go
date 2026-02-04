@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+var ErrAlreadyRegisteredProduct = errors.New("이미 등록된 상품")
 var ErrProductNotFound = errors.New("상품 없음")
 var ErrInvalidQuantity = errors.New("수량 ≤ 0")
 var ErrOutOfStock = errors.New("재고 부족")

@@ -15,6 +15,18 @@ func NewInventory() *Inventory {
 	}
 }
 
+func (i *Inventory) RegisterProduct(productID string) error {
+	i.mu.Lock()
+	defer i.mu.Unlock()
+
+	if _, ok := i.stock[productID]; ok {
+		return ErrAlreadyRegisteredProduct
+	}
+
+	i.stock[productID] = 0
+	return nil
+}
+
 func (i *Inventory) AddStock(productID string, quantity int) error {
 	i.mu.Lock()
 	defer i.mu.Unlock()
