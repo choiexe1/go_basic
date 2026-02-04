@@ -32,14 +32,6 @@ func (i *Inventory) AddStock(productID string, quantity int) error {
 	return nil
 }
 
-func (i *Inventory) GetProduct(productID string) (*Product, error) {
-	if product, ok := i.stock[productID]; ok {
-		return product, nil
-	}
-
-	return nil, ErrProductNotFound
-}
-
 func (i *Inventory) RemoveStock(productID string, quantity int) error {
 	i.mu.Lock()
 	defer i.mu.Unlock()

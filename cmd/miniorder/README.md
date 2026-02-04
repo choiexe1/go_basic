@@ -103,8 +103,8 @@
 | -------- | -------- |
 | `buffer` | `[]byte` |
 
-- [ ] `Write(p []byte) (int, error)` — io.Writer 구현
-- [ ] `String() string` — 버퍼 내용 문자열 반환
+- [x] `Write(p []byte) (int, error)` — io.Writer 구현
+- [x] `String() string` — 버퍼 내용 문자열 반환
 
 ## Step 7 — 주문 처리 (`process.go`)
 
